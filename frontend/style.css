@@ -169,3 +169,14 @@ hr {
 .btn-logout:hover {
   background: #ef4444;
 }
+/* Esconde o Painel do ADM apenas em telas de Celular (até 768px) */
+@media (max-width: 768px) {
+  .container {
+    grid-template-columns: 1fr; /* Ocupa a largura total */
+  }
+
+  /* Oculta a segunda caixa (que é a Central do ADM) */
+  .container > section:nth-child(2) {
+    display: none;
+  }
+}
