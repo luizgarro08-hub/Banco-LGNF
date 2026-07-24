@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>App Banco Realtime</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="container">
+    
+    <section class="card">
+      <h2>📱 Banco LGNF</h2>
+
+      <div id="auth-screen">
+        <div class="form-group">
+          <h3>🔑 Acessar Conta</h3>
+          <input type="text" id="login-id" placeholder="ID da Conta">
+          <input type="password" id="login-pass" placeholder="Senha">
+          <button onclick="loginAccount()">Entrar na Conta</button>
+          <button type="button" class="btn-forgot" onclick="requestPasswordReset()">Esqueci minha senha 🔑</button>
+        </div>
+
+        <hr>
+
+        <div class="form-group">
+          <h3>📝 Criar Nova Conta</h3>
+          <input type="text" id="reg-id" placeholder="Escolha um ID (ex: 101)">
+          <input type="password" id="reg-pass" placeholder="Crie uma Senha">
+          <input type="text" id="reg-name" placeholder="Seu Nome Completo">
+          <input type="text" id="reg-key" placeholder="Chave PIX (ex: nome@pix)">
+          <button onclick="registerAccount()">Criar Minha Conta</button>
+        </div>
+      </div>
+
+      <div id="dashboard-screen" style="display: none;">
+        <div class="user-header">
+          <span id="welcome-msg">Olá, Usuário</span>
+          <button class="btn-logout" onclick="logout()">Sair 🚪</button>
+        </div>
+
+        <div id="balance-card" class="balance-box">
+          <p>Saldo Disponível</p>
+          <h1 id="client-balance">R$ 0,00</h1>
+          <small id="client-pix-key">Chave PIX: -</small>
+          <div id="block-badge" style="display: none; margin-top: 10px;">
+            <span class="badge-blocked">⚠️ Conta Bloqueada por Segurança</span>
+          </div>
+        </div>
+
+        <hr>
+
+        <h3>💸 Área PIX</h3>
+        <div class="form-group">
+          <input type="text" id="pix-target" placeholder="Chave PIX do destinatário">
+          <input type="number" id="pix-amount" placeholder="Valor (R$)">
+          <button onclick="sendPix()">Transferir Agora</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>🛡️ Central ADM & Segurança</h2>
+      
+      <div class="form-group">
+        <label>Ajustar Saldo de Conta</label>
+        <input type="text" id="adm-acc-id" placeholder="ID da Conta">
+        <input type="number" id="adm-acc-balance" placeholder="Novo Saldo (R$)">
+        <button onclick="saveAccount()">Atualizar Saldo</button>
+      </div>
+
+      <hr>
+
+      <div class="form-group">
+        <label>🔐 Redefinir Senha do Cliente</label>
+        <input type="text" id="adm-reset-id" placeholder="ID da Conta">
+        <input type="password" id="adm-reset-pass" placeholder="Nova Senha">
+        <button onclick="resetPasswordByAdmin()">Alterar Senha do Usuário</button>
+      </div>
+
+      <hr>
+
+      <div class="form-group">
+        <label>🚨 Antifraude (Bloqueio Cautelar)</label>
+        <button class="btn-block" onclick="toggleBlock()">Bloquear / Desbloquear ID Informado</button>
+      </div>
+
+      <hr>
+
+      <h3>📋 Monitor de Transações</h3>
+      <ul id="admin-history" class="history-list">
+        <li>Nenhuma movimentação até o momento.</li>
+      </ul>
+    </section>
+
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,195 @@
+:root {
+  --bg-primary: #0f172a;
+  --bg-card: #1e293b;
+  --bg-input: #334155;
+  --accent-blue: #38bdf8;
+  --accent-green: #22c55e;
+  --accent-red: #ef4444;
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-main);
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 24px;
+  width: 100%;
+  max-width: 1000px;
+}
+
+.card {
+  background: var(--bg-card);
+  padding: 24px;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
+  border: 1px solid #334155;
+}
+
+h2 {
+  font-size: 1.3rem;
+  margin-bottom: 20px;
+}
+
+h3 {
+  font-size: 1.1rem;
+  margin-bottom: 12px;
+}
+
+.balance-box {
+  background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
+  padding: 20px;
+  border-radius: 16px;
+  margin: 15px 0;
+  border: 1px solid #4338ca;
+  transition: all 0.3s ease;
+}
+
+.balance-box.blocked {
+  background: linear-gradient(135deg, #450a0a 0%, #7f1d1d 100%);
+  border-color: var(--accent-red);
+}
+
+.balance-box h1 {
+  font-size: 2rem;
+  margin: 8px 0;
+  color: #fff;
+}
+
+.badge-blocked {
+  background-color: var(--accent-red);
+  color: white;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  display: inline-block;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+label {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+input, select, button {
+  padding: 12px 16px;
+  border-radius: 10px;
+  border: 1px solid #475569;
+  background-color: var(--bg-input);
+  color: white;
+  font-size: 0.95rem;
+  outline: none;
+  transition: all 0.2s;
+}
+
+input:focus, select:focus {
+  border-color: var(--accent-blue);
+}
+
+button {
+  background: var(--accent-blue);
+  color: #0f172a;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  margin-top: 5px;
+}
+
+button:hover {
+  filter: brightness(1.15);
+}
+
+button.btn-block {
+  background: var(--accent-red);
+  color: white;
+}
+
+hr {
+  border: 0;
+  height: 1px;
+  background: #334155;
+  margin: 20px 0;
+}
+
+.history-list {
+  list-style: none;
+  max-height: 200px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.history-list li {
+  background: #0f172a;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  border-left: 3px solid var(--accent-blue);
+}
+.user-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  font-weight: bold;
+}
+
+.btn-logout {
+  background: #475569;
+  color: white;
+  padding: 6px 12px;
+  font-size: 0.8rem;
+  margin-top: 0;
+}
+
+.btn-logout:hover {
+  background: #ef4444;
+}
+.btn-forgot {
+  background: transparent;
+  color: var(--accent-blue);
+  border: none;
+  font-size: 0.85rem;
+  text-decoration: underline;
+  cursor: pointer;
+  margin-top: 5px;
+}
+
+.btn-forgot:hover {
+  color: #7dd3fc;
+}
+/* Esconde o Painel do ADM apenas em telas de Celular (até 768px) */
+@media (max-width: 768px) {
+  .container {
+    grid-template-columns: 1fr; /* Ocupa a largura total */
+  }
+
+  /* Oculta a segunda caixa (que é a Central do ADM) */
+  .container > section:nth-child(2) {
+    display: none;
+  }
+}
