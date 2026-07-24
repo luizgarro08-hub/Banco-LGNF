@@ -237,20 +237,3 @@ function toggleBlock() {
     });
   }
 }
-// Alternar visibilidade do saldo
-const toggleEye = document.getElementById('toggle-balance');
-const balanceElement = document.getElementById('account-balance');
-let isBalanceVisible = true;
-
-if (toggleEye && balanceElement) {
-    toggleEye.addEventListener('click', () => {
-        isBalanceVisible = !isBalanceVisible;
-        if (isBalanceVisible) {
-            balanceElement.style.filter = "none";
-            toggleEye.classList.replace('fa-eye-slash', 'fa-eye');
-        } else {
-            balanceElement.style.filter = "blur(8px)";
-            toggleEye.classList.replace('fa-eye', 'fa-eye-slash');
-        }
-    });
-}
