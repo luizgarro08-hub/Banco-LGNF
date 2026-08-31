@@ -3,92 +3,120 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>App Banco Realtime</title>
+  <title>Áurea | Conta digital</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <div class="container">
-    
-    <section class="card">
-      <h2>📱 Bank App</h2>
+  <header class="brand-bar">
+    <div class="brand-mark">
+      <span class="brand-seal">Á</span>
+      <div>
+        <p class="brand-name">Áurea</p>
+        <p class="brand-tagline">Conta digital</p>
+      </div>
+    </div>
+  </header>
 
+  <div class="container">
+
+    <section class="card card-client">
       <div id="auth-screen">
+
+        <div class="panel-intro">
+          <h2>Acessar conta</h2>
+          <p class="panel-sub">Entre com o ID da sua conta e sua senha.</p>
+        </div>
         <div class="form-group">
-          <h3>🔑 Acessar Conta</h3>
-          <input type="text" id="login-id" placeholder="ID da Conta">
+          <input type="text" id="login-id" placeholder="ID da conta">
           <input type="password" id="login-pass" placeholder="Senha">
-          <button onclick="loginAccount()">Entrar na Conta</button>
-          <button type="button" class="btn-forgot" onclick="requestPasswordReset()">Esqueci minha senha 🔑</button>
+          <button onclick="loginAccount()">Entrar</button>
+          <button type="button" class="btn-forgot" onclick="requestPasswordReset()">Esqueci minha senha</button>
         </div>
 
         <hr>
 
+        <div class="panel-intro">
+          <h3>Abrir conta</h3>
+          <p class="panel-sub">Leva menos de um minuto.</p>
+        </div>
         <div class="form-group">
-          <h3>📝 Criar Nova Conta</h3>
           <input type="text" id="reg-id" placeholder="Escolha um ID (ex: 101)">
-          <input type="password" id="reg-pass" placeholder="Crie uma Senha">
-          <input type="text" id="reg-name" placeholder="Seu Nome Completo">
-          <input type="text" id="reg-key" placeholder="Chave PIX (ex: nome@pix)">
-          <button onclick="registerAccount()">Criar Minha Conta</button>
+          <input type="password" id="reg-pass" placeholder="Crie uma senha">
+          <input type="text" id="reg-name" placeholder="Nome completo">
+          <input type="text" id="reg-key" placeholder="Chave Pix (ex: nome@pix)">
+          <button onclick="registerAccount()">Criar conta</button>
         </div>
       </div>
 
       <div id="dashboard-screen" style="display: none;">
         <div class="user-header">
           <span id="welcome-msg">Olá, Usuário</span>
-          <button class="btn-logout" onclick="logout()">Sair 🚪</button>
+          <button class="btn-logout" onclick="logout()">Sair</button>
         </div>
 
         <div id="balance-card" class="balance-box">
-          <p>Saldo Disponível</p>
+          <div class="balance-box__top">
+            <span class="chip" aria-hidden="true"></span>
+            <span class="balance-box__brand">ÁUREA</span>
+          </div>
+
+          <p class="balance-box__label">Saldo disponível</p>
           <h1 id="client-balance">R$ 0,00</h1>
-          <small id="client-pix-key">Chave PIX: -</small>
-          <div id="block-badge" style="display: none; margin-top: 10px;">
-            <span class="badge-blocked">⚠️ Conta Bloqueada por Segurança</span>
+          <small id="client-pix-key">Chave Pix: -</small>
+
+          <div id="block-badge" style="display: none;">
+            <span class="badge-blocked">Conta bloqueada por segurança</span>
           </div>
         </div>
 
         <hr>
 
-        <h3>💸 Área PIX</h3>
+        <h3>Fazer um Pix</h3>
         <div class="form-group">
-          <input type="text" id="pix-target" placeholder="Chave PIX do destinatário">
+          <input type="text" id="pix-target" placeholder="Chave Pix do destinatário">
           <input type="number" id="pix-amount" placeholder="Valor (R$)">
-          <button onclick="sendPix()">Transferir Agora</button>
+          <button onclick="sendPix()">Transferir</button>
         </div>
       </div>
     </section>
 
-    <section class="card">
-      <h2>🛡️ Central ADM & Segurança</h2>
-      
+    <section class="card card-admin">
+      <div class="panel-intro panel-intro--admin">
+        <p class="admin-eyebrow">Uso interno</p>
+        <h2>Painel de operações</h2>
+      </div>
+
       <div class="form-group">
-        <label>Ajustar Saldo de Conta</label>
-        <input type="text" id="adm-acc-id" placeholder="ID da Conta">
-        <input type="number" id="adm-acc-balance" placeholder="Novo Saldo (R$)">
-        <button onclick="saveAccount()">Atualizar Saldo</button>
+        <label>Ajustar saldo da conta</label>
+        <input type="text" id="adm-acc-id" placeholder="ID da conta">
+        <input type="number" id="adm-acc-balance" placeholder="Novo saldo (R$)">
+        <button onclick="saveAccount()">Atualizar saldo</button>
       </div>
 
       <hr>
 
       <div class="form-group">
-        <label>🔐 Redefinir Senha do Cliente</label>
-        <input type="text" id="adm-reset-id" placeholder="ID da Conta">
-        <input type="password" id="adm-reset-pass" placeholder="Nova Senha">
-        <button onclick="resetPasswordByAdmin()">Alterar Senha do Usuário</button>
+        <label>Redefinir senha do cliente</label>
+        <input type="text" id="adm-reset-id" placeholder="ID da conta">
+        <input type="password" id="adm-reset-pass" placeholder="Nova senha">
+        <button onclick="resetPasswordByAdmin()">Alterar senha</button>
       </div>
 
       <hr>
 
       <div class="form-group">
-        <label>🚨 Antifraude (Bloqueio Cautelar)</label>
-        <button class="btn-block" onclick="toggleBlock()">Bloquear / Desbloquear ID Informado</button>
+        <label>Antifraude — bloqueio cautelar</label>
+        <p class="field-hint">Usa o ID informado no campo acima ("Ajustar saldo da conta").</p>
+        <button class="btn-block" onclick="toggleBlock()">Bloquear / desbloquear ID</button>
       </div>
 
       <hr>
 
-      <h3>📋 Monitor de Transações</h3>
+      <h3>Movimentações</h3>
       <ul id="admin-history" class="history-list">
         <li>Nenhuma movimentação até o momento.</li>
       </ul>
