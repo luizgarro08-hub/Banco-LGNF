@@ -339,9 +339,87 @@ hr {
 .user-header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   margin-bottom: 18px;
   font-weight: 600;
+}
+
+.user-header__date {
+  font-weight: 400;
+  font-size: 0.78rem;
+  color: var(--muted-2);
+  text-transform: capitalize;
+  margin-top: 3px;
+}
+
+.balance-box__label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.icon-btn {
+  background: transparent;
+  border: none;
+  padding: 4px;
+  margin: 0;
+  color: var(--muted);
+  cursor: pointer;
+  display: flex;
+}
+
+.icon-btn:hover {
+  color: var(--gold);
+  filter: none;
+}
+
+.balance-box__account {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--muted-2);
+  margin-top: 6px;
+}
+
+.quick-actions {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin: 18px 0 6px;
+}
+
+.quick-action {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  background: var(--field);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 12px 6px;
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: var(--text);
+  text-align: center;
+}
+
+.quick-action__icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(201, 162, 75, 0.1);
+  color: var(--gold);
+}
+
+.quick-action:hover {
+  filter: none;
+  border-color: var(--gold-dim);
+}
+
+.history-list--client li {
+  border-left-color: var(--emerald);
 }
 
 /* ---------- History / ledger ---------- */
