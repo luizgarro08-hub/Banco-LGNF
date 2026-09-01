@@ -54,7 +54,10 @@
 
       <div id="dashboard-screen" style="display: none;">
         <div class="user-header">
-          <span id="welcome-msg">Olá, Usuário</span>
+          <div>
+            <span id="welcome-msg">Olá, Usuário</span>
+            <p id="today-date" class="user-header__date"></p>
+          </div>
           <button class="btn-logout" onclick="logout()">Sair</button>
         </div>
 
@@ -64,13 +67,38 @@
             <span class="balance-box__brand">ÁUREA</span>
           </div>
 
-          <p class="balance-box__label">Saldo disponível</p>
+          <div class="balance-box__label-row">
+            <p class="balance-box__label">Saldo disponível</p>
+            <button type="button" class="icon-btn" id="toggle-balance" onclick="toggleBalanceVisibility()" aria-label="Mostrar ou ocultar saldo">
+              <svg id="eye-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M1.5 12S5 5 12 5s10.5 7 10.5 7-3.5 7-10.5 7S1.5 12 1.5 12Z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
           <h1 id="client-balance">R$ 0,00</h1>
           <small id="client-pix-key">Chave Pix: -</small>
+          <p id="client-account-line" class="balance-box__account"></p>
 
           <div id="block-badge" style="display: none;">
             <span class="badge-blocked">Conta bloqueada por segurança</span>
           </div>
+        </div>
+
+        <div class="quick-actions">
+          <button type="button" class="quick-action" onclick="focusPix()">
+            <span class="quick-action__icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3v18M3 12h18"/></svg></span>
+            Pix
+          </button>
+          <button type="button" class="quick-action" onclick="copyPixKey()">
+            <span class="quick-action__icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M4 16V5a1 1 0 0 1 1-1h11"/></svg></span>
+            Copiar chave
+          </button>
+          <button type="button" class="quick-action" onclick="scrollToExtract()">
+            <span class="quick-action__icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 4h16v16H4z"/><path d="M8 9h8M8 13h8M8 17h5"/></svg></span>
+            Extrato
+          </button>
+          <button type="button" class="quick-action" onclick="showHelp()">
+            <span class="quick-action__icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 0 1 5 0c0 1.7-2.2 2-2.5 3.3M12 17h.01"/></svg></span>
+            Ajuda
+          </button>
         </div>
 
         <hr>
@@ -81,6 +109,13 @@
           <input type="number" id="pix-amount" placeholder="Valor (R$)">
           <button onclick="sendPix()">Transferir</button>
         </div>
+
+        <hr>
+
+        <h3 id="extrato-anchor">Extrato</h3>
+        <ul id="client-extract" class="history-list history-list--client">
+          <li>Nenhuma movimentação ainda.</li>
+        </ul>
       </div>
     </section>
 
