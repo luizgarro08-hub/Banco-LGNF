@@ -1,166 +1,765 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-theme="dark">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Áurea | Conta digital</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#0a0f1c">
+  <title>Áurea | Banco digital de simulação</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <script>
+    /* Aplica o tema salvo antes da primeira pintura, para não piscar */
+    try {
+      var t = localStorage.getItem('aurea:theme') || 'dark';
+      if (t === 'auto') t = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', t);
+    } catch (e) {}
+  </script>
 </head>
 <body>
 
-  <header class="brand-bar">
-    <div class="brand-mark">
-      <span class="brand-seal">Á</span>
-      <div>
-        <p class="brand-name">Áurea</p>
-        <p class="brand-tagline">Conta digital</p>
-      </div>
-    </div>
-  </header>
+  <!-- ===== Ícones ===== -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <defs>
+      <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 11.5 12 4l9 7.5"/><path d="M5 10v9a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1v-9"/></symbol>
+      <symbol id="i-pix" viewBox="0 0 24 24"><path d="M12 2.8 21.2 12 12 21.2 2.8 12Z"/><path d="M8.6 12h6.8M12 8.6v6.8"/></symbol>
+      <symbol id="i-transfer" viewBox="0 0 24 24"><path d="M4 8h15l-3.5-3.5M20 16H5l3.5 3.5"/></symbol>
+      <symbol id="i-deposit" viewBox="0 0 24 24"><path d="M12 4v11M7.5 10.5 12 15l4.5-4.5M5 20h14"/></symbol>
+      <symbol id="i-withdraw" viewBox="0 0 24 24"><path d="M12 15V4M7.5 8.5 12 4l4.5 4.5M5 20h14"/></symbol>
+      <symbol id="i-statement" viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6Z"/><path d="M14 3v5h5M9 13h7M9 17h7"/></symbol>
+      <symbol id="i-invest" viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></symbol>
+      <symbol id="i-card" viewBox="0 0 24 24"><rect x="2.5" y="5" width="19" height="14" rx="2.5"/><path d="M2.5 10h19M6 15h4"/></symbol>
+      <symbol id="i-pay" viewBox="0 0 24 24"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2Z"/><path d="M9 8h6M9 12h6"/></symbol>
+      <symbol id="i-settings" viewBox="0 0 24 24"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/></symbol>
+      <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 16v-5a6 6 0 0 1 12 0v5l1.5 2h-15Z"/><path d="M10 21h4"/></symbol>
+      <symbol id="i-eye" viewBox="0 0 24 24"><path d="M1.5 12S5 5 12 5s10.5 7 10.5 7-3.5 7-10.5 7S1.5 12 1.5 12Z"/><circle cx="12" cy="12" r="3"/></symbol>
+      <symbol id="i-eye-off" viewBox="0 0 24 24"><path d="M3 3l18 18M10.6 10.6a2 2 0 0 0 2.8 2.8M9.5 5.1A10.7 10.7 0 0 1 12 5c7 0 10.5 7 10.5 7a13.7 13.7 0 0 1-3.1 4M6.2 6.6C3.7 8.4 1.5 12 1.5 12s3.5 7 10.5 7c1.4 0 2.7-.2 3.9-.7"/></symbol>
+      <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M4 16V5a1 1 0 0 1 1-1h11"/></symbol>
+      <symbol id="i-share" viewBox="0 0 24 24"><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="6" r="2.5"/><circle cx="18" cy="18" r="2.5"/><path d="M8.2 10.8l7.6-3.6M8.2 13.2l7.6 3.6"/></symbol>
+      <symbol id="i-qr" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3zM20 14v3M14 20h3M20 20h1"/></symbol>
+      <symbol id="i-check" viewBox="0 0 24 24"><path d="M4.5 12.5l5 5L19.5 7"/></symbol>
+      <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+      <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 3.5 22 20H2Z"/><path d="M12 10v4.5M12 17.5v.01"/></symbol>
+      <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 4.5-3.2 8-8 9-4.8-1-8-4.5-8-9V6Z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></symbol>
+      <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-6.5 8-6.5s8 2.5 8 6.5"/></symbol>
+      <symbol id="i-logout" viewBox="0 0 24 24"><path d="M9 4H5a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h4M16 8l4 4-4 4M20 12H9"/></symbol>
+      <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2.5V5M12 19v2.5M2.5 12H5M19 12h2.5M5.2 5.2 7 7M17 17l1.8 1.8M18.8 5.2 17 7M7 17l-1.8 1.8"/></symbol>
+      <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4 8.5 8.5 0 1 0 20 14.5Z"/></symbol>
+      <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+      <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/></symbol>
+      <symbol id="i-unlock" viewBox="0 0 24 24"><rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8 10.5V8a4 4 0 0 1 7.5-2"/></symbol>
+      <symbol id="i-chart" viewBox="0 0 24 24"><path d="M5 20v-8M12 20V5M19 20v-5"/></symbol>
+      <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></symbol>
+      <symbol id="i-chevron" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></symbol>
+      <symbol id="i-back" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></symbol>
+      <symbol id="i-dots" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.2"/><circle cx="12" cy="12" r="1.2"/><circle cx="19" cy="12" r="1.2"/></symbol>
+      <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></symbol>
+      <symbol id="i-droplet" viewBox="0 0 24 24"><path d="M12 3.5s6 6.2 6 10.5a6 6 0 0 1-12 0c0-4.3 6-10.5 6-10.5Z"/></symbol>
+      <symbol id="i-zap" viewBox="0 0 24 24"><path d="M13 2.5 5 13.5h6l-1 8 8-11h-6Z"/></symbol>
+      <symbol id="i-wifi" viewBox="0 0 24 24"><path d="M2.5 9a14 14 0 0 1 19 0M5.5 12.5a9.5 9.5 0 0 1 13 0M8.8 16a5 5 0 0 1 6.4 0"/><path d="M12 19.5v.01"/></symbol>
+      <symbol id="i-phone" viewBox="0 0 24 24"><rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M11 18.5h2"/></symbol>
+      <symbol id="i-bag" viewBox="0 0 24 24"><path d="M5 8h14l-1 12H6Z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></symbol>
+      <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8v.01"/></symbol>
+      <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 11a8 8 0 0 0-14-4M4 4v4h4M4 13a8 8 0 0 0 14 4M20 20v-4h-4"/></symbol>
+      <symbol id="i-camera" viewBox="0 0 24 24"><path d="M4 8h3l1.5-2.5h7L17 8h3v11H4Z"/><circle cx="12" cy="13" r="3.5"/></symbol>
+      <symbol id="i-in" viewBox="0 0 24 24"><path d="M18 6 6 18M6 9v9h9"/></symbol>
+      <symbol id="i-out" viewBox="0 0 24 24"><path d="M6 18 18 6M9 6h9v9"/></symbol>
+      <symbol id="i-key" viewBox="0 0 24 24"><circle cx="8" cy="15" r="4"/><path d="M11 12l9-9M16 7l3 3"/></symbol>
+      <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M6.5 7l1 13h9l1-13"/></symbol>
+      <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8.5" r="3.5"/><path d="M2.5 20c0-3.6 2.9-5.5 6.5-5.5s6.5 1.9 6.5 5.5M16 5.2a3.5 3.5 0 0 1 0 6.6M18.5 14.8c1.9.7 3 2.3 3 5.2"/></symbol>
+    </defs>
+  </svg>
 
-  <div class="container">
+  <div id="conn-banner" class="conn-banner" hidden>Sem conexão com o servidor. Tentando reconectar…</div>
+  <div id="toast-root" class="toast-root" aria-live="polite"></div>
+  <div id="modal-root"></div>
 
-    <section class="card card-client">
-      <div id="auth-screen">
+  <!-- =====================================================
+       AUTENTICAÇÃO
+       ===================================================== -->
+  <main id="auth-screen" class="auth">
+    <div class="auth__shell">
 
-        <div class="panel-intro">
-          <h2>Acessar conta</h2>
-          <p class="panel-sub">Entre com o ID da sua conta e sua senha.</p>
-        </div>
-        <div class="form-group">
-          <input type="text" id="login-id" placeholder="ID da conta">
-          <input type="password" id="login-pass" placeholder="Senha">
-          <button onclick="loginAccount()">Entrar</button>
-          <button type="button" class="btn-forgot" onclick="requestPasswordReset()">Esqueci minha senha</button>
-        </div>
-
-        <hr>
-
-        <div class="panel-intro">
-          <h3>Abrir conta</h3>
-          <p class="panel-sub">Leva menos de um minuto.</p>
-        </div>
-        <div class="form-group">
-          <input type="text" id="reg-id" placeholder="Escolha um ID (ex: 101)">
-          <input type="password" id="reg-pass" placeholder="Crie uma senha">
-          <input type="text" id="reg-name" placeholder="Nome completo">
-          <input type="text" id="reg-key" placeholder="Chave Pix (ex: nome@pix)">
-          <button onclick="registerAccount()">Criar conta</button>
-        </div>
-      </div>
-
-      <div id="dashboard-screen" style="display: none;">
-        <div class="user-header">
+      <aside class="auth__hero">
+        <div class="brand">
+          <span class="brand__seal">Á</span>
           <div>
-            <span id="welcome-msg">Olá, Usuário</span>
-            <p id="today-date" class="user-header__date"></p>
+            <p class="brand__name">Áurea</p>
+            <p class="brand__tag">Banco digital de simulação</p>
           </div>
-          <button class="btn-logout" onclick="logout()">Sair</button>
         </div>
 
-        <div id="balance-card" class="balance-box">
-          <div class="balance-box__top">
-            <span class="chip" aria-hidden="true"></span>
-            <span class="balance-box__brand">ÁUREA</span>
+        <div class="auth__pitch">
+          <h1>Um banco para praticar.</h1>
+          <p>Pix, transferências, cartões e investimentos funcionando de verdade entre as contas, só que com dinheiro de mentira.</p>
+        </div>
+
+        <div class="demo-card" aria-hidden="true">
+          <span class="chip"></span>
+          <p class="demo-card__label">Saldo disponível</p>
+          <p class="demo-card__value">R$ 12.480,00</p>
+          <p class="demo-card__meta">Conta 0001 / Agência 0001</p>
+        </div>
+
+        <p class="sim-note"><svg class="ic"><use href="#i-shield"/></svg> Simulador educativo. Nenhum dinheiro real é movimentado e nenhum dado bancário real deve ser informado.</p>
+      </aside>
+
+      <section class="auth__panel">
+        <div class="auth__top">
+          <button type="button" class="btn-icon" data-action="toggle-theme" aria-label="Alternar tema claro e escuro"><svg class="ic theme-ic"><use href="#i-sun"/></svg></button>
+        </div>
+
+        <div class="tabs tabs--auth" role="tablist">
+          <button type="button" class="tab is-active" role="tab" data-auth-tab="login">Entrar</button>
+          <button type="button" class="tab" role="tab" data-auth-tab="register">Abrir conta</button>
+        </div>
+
+        <form id="login-form" class="form" autocomplete="off">
+          <div class="panel-intro">
+            <h2>Acessar conta</h2>
+            <p>Entre com o ID da sua conta e sua senha.</p>
+          </div>
+          <label class="field"><span>ID da conta</span><input type="text" id="login-id" placeholder="Ex: 101" inputmode="numeric" autocomplete="username"></label>
+          <label class="field"><span>Senha</span><input type="password" id="login-pass" placeholder="Sua senha" autocomplete="current-password"></label>
+          <button type="submit" class="btn btn--primary btn--block">Entrar</button>
+          <button type="button" class="btn-link" data-action="forgot">Esqueci minha senha</button>
+        </form>
+
+        <form id="register-form" class="form" autocomplete="off" hidden>
+          <div class="panel-intro">
+            <h2>Abrir conta</h2>
+            <p>Leva menos de um minuto. Use um ID e uma senha de mentira.</p>
+          </div>
+          <label class="field"><span>ID da conta</span><input type="text" id="reg-id" placeholder="Escolha um ID (ex: 101)"></label>
+          <label class="field"><span>Senha</span><input type="password" id="reg-pass" placeholder="Crie uma senha simples de teste" autocomplete="new-password"></label>
+          <label class="field"><span>Nome completo</span><input type="text" id="reg-name" placeholder="Seu nome"></label>
+          <label class="field"><span>Chave Pix</span><input type="text" id="reg-key" placeholder="Ex: nome@pix"></label>
+          <button type="submit" class="btn btn--primary btn--block">Criar conta</button>
+        </form>
+
+        <div class="auth__foot">
+          <button type="button" class="btn-link" data-action="open-admin"><svg class="ic"><use href="#i-settings"/></svg> Painel de operações</button>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- =====================================================
+       APLICATIVO DO CLIENTE
+       ===================================================== -->
+  <div id="app-screen" class="app" hidden>
+
+    <aside class="sidebar" aria-label="Menu principal">
+      <div class="brand brand--side">
+        <span class="brand__seal">Á</span>
+        <div class="brand__text">
+          <p class="brand__name">Áurea</p>
+          <p class="brand__tag">Simulador</p>
+        </div>
+      </div>
+
+      <nav class="nav">
+        <button type="button" class="nav__item" data-nav="home"><svg class="ic"><use href="#i-home"/></svg><span>Início</span></button>
+        <button type="button" class="nav__item" data-nav="pix"><svg class="ic"><use href="#i-pix"/></svg><span>Pix</span></button>
+        <button type="button" class="nav__item" data-nav="transfer"><svg class="ic"><use href="#i-transfer"/></svg><span>Transferências</span></button>
+        <button type="button" class="nav__item" data-nav="extract"><svg class="ic"><use href="#i-statement"/></svg><span>Extrato</span></button>
+        <button type="button" class="nav__item" data-nav="invest"><svg class="ic"><use href="#i-invest"/></svg><span>Investimentos</span></button>
+        <button type="button" class="nav__item" data-nav="cards"><svg class="ic"><use href="#i-card"/></svg><span>Cartões e fatura</span></button>
+        <button type="button" class="nav__item" data-nav="pay"><svg class="ic"><use href="#i-pay"/></svg><span>Pagamentos</span></button>
+        <button type="button" class="nav__item" data-nav="analytics"><svg class="ic"><use href="#i-chart"/></svg><span>Análises</span></button>
+        <button type="button" class="nav__item" data-nav="notifs"><svg class="ic"><use href="#i-bell"/></svg><span>Notificações</span><b class="badge" data-notif-badge hidden>0</b></button>
+        <button type="button" class="nav__item" data-nav="profile"><svg class="ic"><use href="#i-user"/></svg><span>Perfil e ajustes</span></button>
+      </nav>
+
+      <div class="sidebar__foot">
+        <button type="button" class="user-chip" data-nav="profile">
+          <span class="avatar avatar--sm" data-avatar></span>
+          <span class="user-chip__text"><b data-user-name>Usuário</b><small data-user-account>Conta -</small></span>
+        </button>
+        <button type="button" class="nav__item nav__item--quiet" data-action="logout"><svg class="ic"><use href="#i-logout"/></svg><span>Sair</span></button>
+      </div>
+    </aside>
+
+    <div class="app__main">
+      <header class="topbar">
+        <div class="topbar__brand">
+          <span class="brand__seal brand__seal--sm">Á</span>
+          <h2 id="page-title">Início</h2>
+        </div>
+        <div class="topbar__actions">
+          <button type="button" class="btn-icon" data-action="toggle-balance" aria-label="Ocultar saldo"><svg class="ic" data-eye><use href="#i-eye"/></svg></button>
+          <button type="button" class="btn-icon" data-action="toggle-theme" aria-label="Alternar tema claro e escuro"><svg class="ic theme-ic"><use href="#i-sun"/></svg></button>
+          <button type="button" class="btn-icon btn-icon--bell" data-nav="notifs" aria-label="Notificações"><svg class="ic"><use href="#i-bell"/></svg><b class="badge badge--dot" data-notif-badge hidden>0</b></button>
+          <button type="button" class="avatar avatar--sm avatar--btn" data-nav="profile" data-avatar aria-label="Abrir perfil"></button>
+        </div>
+      </header>
+
+      <div class="views" id="views">
+
+        <!-- ===== INÍCIO ===== -->
+        <section class="view" id="view-home" data-view="home" hidden>
+          <div class="home-head">
+            <span class="avatar avatar--lg" data-avatar></span>
+            <div>
+              <h1 id="welcome-msg">Olá</h1>
+              <p id="today-date" class="muted"></p>
+            </div>
           </div>
 
-          <div class="balance-box__label-row">
-            <p class="balance-box__label">Saldo disponível</p>
-            <button type="button" class="icon-btn" id="toggle-balance" onclick="toggleBalanceVisibility()" aria-label="Mostrar ou ocultar saldo">
-              <svg id="eye-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M1.5 12S5 5 12 5s10.5 7 10.5 7-3.5 7-10.5 7S1.5 12 1.5 12Z"/><circle cx="12" cy="12" r="3"/></svg>
+          <div class="home-top">
+            <div id="balance-card" class="balance-card">
+              <div class="balance-card__row">
+                <span class="chip" aria-hidden="true"></span>
+                <span class="balance-card__brand">Áurea</span>
+              </div>
+              <div class="balance-card__label">
+                <p>Saldo disponível</p>
+                <button type="button" class="btn-icon btn-icon--ghost" data-action="toggle-balance" aria-label="Ocultar saldo"><svg class="ic" data-eye><use href="#i-eye"/></svg></button>
+              </div>
+              <p class="balance-card__value skel" id="bal-available" data-money>R$ 0,00</p>
+              <p class="balance-card__total"><span>Saldo total com investimentos</span> <b id="bal-total" data-money>R$ 0,00</b></p>
+              <div class="balance-card__foot">
+                <p id="bal-pixkey" class="mono">Chave Pix: -</p>
+                <p id="bal-account" class="mono">Conta - / Agência 0001</p>
+              </div>
+              <div id="block-badge" class="badge-blocked" hidden><svg class="ic"><use href="#i-lock"/></svg> Conta bloqueada por segurança</div>
+            </div>
+
+            <div class="action-grid" id="action-grid">
+              <button type="button" class="tile" data-nav="pix"><span class="tile__ic"><svg class="ic"><use href="#i-pix"/></svg></span>Pix</button>
+              <button type="button" class="tile" data-nav="transfer"><span class="tile__ic"><svg class="ic"><use href="#i-transfer"/></svg></span>Transferir</button>
+              <button type="button" class="tile" data-action="deposit"><span class="tile__ic"><svg class="ic"><use href="#i-deposit"/></svg></span>Depositar</button>
+              <button type="button" class="tile" data-action="withdraw"><span class="tile__ic"><svg class="ic"><use href="#i-withdraw"/></svg></span>Sacar</button>
+              <button type="button" class="tile" data-nav="extract"><span class="tile__ic"><svg class="ic"><use href="#i-statement"/></svg></span>Extrato</button>
+              <button type="button" class="tile" data-nav="invest"><span class="tile__ic"><svg class="ic"><use href="#i-invest"/></svg></span>Investimentos</button>
+              <button type="button" class="tile" data-nav="cards"><span class="tile__ic"><svg class="ic"><use href="#i-card"/></svg></span>Cartões</button>
+              <button type="button" class="tile" data-nav="pay"><span class="tile__ic"><svg class="ic"><use href="#i-pay"/></svg></span>Pagamentos</button>
+              <button type="button" class="tile" data-nav="profile"><span class="tile__ic"><svg class="ic"><use href="#i-settings"/></svg></span>Configurações</button>
+              <button type="button" class="tile" data-nav="notifs"><span class="tile__ic"><svg class="ic"><use href="#i-bell"/></svg><b class="badge badge--dot" data-notif-badge hidden>0</b></span>Notificações</button>
+            </div>
+          </div>
+
+          <div class="info-grid">
+            <button type="button" class="info info--wide" data-nav="extract">
+              <span class="info__label">Última transação</span>
+              <b class="info__value skel" id="info-last">Nenhuma ainda</b>
+              <span class="info__sub skel" id="info-last-sub">Suas movimentações aparecem aqui.</span>
+            </button>
+            <div class="info">
+              <span class="info__label">Gastos do mês</span>
+              <b class="info__value skel neg" id="info-spend" data-money>R$ 0,00</b>
+              <span class="info__sub" id="info-spend-sub">Pix, pagamentos, saques e fatura</span>
+            </div>
+            <div class="info">
+              <span class="info__label">Entradas do mês</span>
+              <b class="info__value skel pos" id="info-income" data-money>R$ 0,00</b>
+              <span class="info__sub" id="info-income-sub">Pix recebidos e depósitos</span>
+            </div>
+            <button type="button" class="info info--half" data-nav="invest">
+              <span class="info__label">Investimentos</span>
+              <b class="info__value skel" id="info-invest" data-money>R$ 0,00</b>
+              <span class="info__sub" id="info-invest-sub">Nenhum investimento ativo</span>
+            </button>
+            <button type="button" class="info info--half" data-nav="cards">
+              <span class="info__label">Limite do cartão</span>
+              <b class="info__value skel" id="info-limit" data-money>R$ 0,00</b>
+              <span class="info__sub" id="info-limit-sub">disponível</span>
             </button>
           </div>
-          <h1 id="client-balance">R$ 0,00</h1>
-          <small id="client-pix-key">Chave Pix: -</small>
-          <p id="client-account-line" class="balance-box__account"></p>
 
-          <div id="block-badge" style="display: none;">
-            <span class="badge-blocked">Conta bloqueada por segurança</span>
+          <div class="split">
+            <section class="panel">
+              <div class="panel__head">
+                <h3>Movimentações recentes</h3>
+                <button type="button" class="btn-link" data-nav="extract">Ver extrato completo</button>
+              </div>
+              <ul id="home-recent" class="tx-list"></ul>
+            </section>
+            <section class="panel">
+              <div class="panel__head"><h3>Últimos 7 dias</h3></div>
+              <div id="home-week" class="chart"></div>
+              <div class="legend" id="home-week-legend"></div>
+            </section>
           </div>
-        </div>
+        </section>
 
-        <div class="quick-actions">
-          <button type="button" class="quick-action" onclick="focusPix()">
-            <span class="quick-action__icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3v18M3 12h18"/></svg></span>
-            Pix
-          </button>
-          <button type="button" class="quick-action" onclick="copyPixKey()">
-            <span class="quick-action__icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M4 16V5a1 1 0 0 1 1-1h11"/></svg></span>
-            Copiar chave
-          </button>
-          <button type="button" class="quick-action" onclick="scrollToExtract()">
-            <span class="quick-action__icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 4h16v16H4z"/><path d="M8 9h8M8 13h8M8 17h5"/></svg></span>
-            Extrato
-          </button>
-          <button type="button" class="quick-action" onclick="showHelp()">
-            <span class="quick-action__icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 0 1 5 0c0 1.7-2.2 2-2.5 3.3M12 17h.01"/></svg></span>
-            Ajuda
-          </button>
-        </div>
+        <!-- ===== PIX ===== -->
+        <section class="view" id="view-pix" data-view="pix" hidden>
+          <div class="view-head">
+            <h1>Pix</h1>
+            <p class="muted">Envie e receba dinheiro de mentira entre as contas do simulador.</p>
+          </div>
 
-        <hr>
+          <div class="tabs" data-tabgroup="pix" role="tablist">
+            <button type="button" class="tab is-active" data-tab="send">Enviar</button>
+            <button type="button" class="tab" data-tab="receive">Receber</button>
+            <button type="button" class="tab" data-tab="history">Histórico</button>
+            <button type="button" class="tab" data-tab="keys">Minhas chaves</button>
+          </div>
 
-        <h3>Fazer um Pix</h3>
-        <div class="form-group">
-          <input type="text" id="pix-target" placeholder="Chave Pix do destinatário">
-          <input type="number" id="pix-amount" placeholder="Valor (R$)">
-          <button onclick="sendPix()">Transferir</button>
-        </div>
+          <div class="tab-pane" data-group="pix" data-pane="send">
+            <div class="split split--form">
+              <form id="pix-form" class="panel form" autocomplete="off">
+                <h3>Enviar Pix</h3>
+                <label class="field"><span>Chave Pix do destinatário</span><input type="text" id="pix-key" placeholder="Ex: nome@pix" autocomplete="off"></label>
+                <div id="pix-recipient" class="recipient" hidden></div>
+                <label class="field"><span>Valor</span><input type="text" id="pix-amount" placeholder="R$ 0,00" inputmode="decimal"></label>
+                <div class="chips" data-amount-chips="pix-amount">
+                  <button type="button" class="chip-btn" data-amt="10">R$ 10</button>
+                  <button type="button" class="chip-btn" data-amt="50">R$ 50</button>
+                  <button type="button" class="chip-btn" data-amt="100">R$ 100</button>
+                  <button type="button" class="chip-btn" data-amt="250">R$ 250</button>
+                </div>
+                <label class="field"><span>Descrição (opcional)</span><input type="text" id="pix-desc" placeholder="Ex: almoço de domingo" maxlength="60"></label>
+                <p class="hint" id="pix-avail"></p>
+                <button type="submit" class="btn btn--primary btn--block">Continuar</button>
+              </form>
+              <aside class="panel panel--aside">
+                <h3>Como funciona</h3>
+                <ol class="steps">
+                  <li>Informe a chave Pix de outra conta do simulador.</li>
+                  <li>Confira o nome do destinatário e o valor.</li>
+                  <li>Confirme. O saldo dos dois lados muda na hora, sem recarregar.</li>
+                  <li>Guarde ou compartilhe o comprovante fictício.</li>
+                </ol>
+                <p class="hint">Pix acima de R$ 1.000,00 pedem a confirmação de identidade dentro do sistema.</p>
+              </aside>
+            </div>
+          </div>
 
-        <hr>
+          <div class="tab-pane" data-group="pix" data-pane="receive" hidden>
+            <div class="split split--form">
+              <section class="panel qr-panel">
+                <h3>Receber por Pix</h3>
+                <div id="qr-box" class="qr" aria-label="QR Code fictício"></div>
+                <p class="hint">QR Code fictício, só para ilustrar. Ele não pode ser lido por aplicativos reais.</p>
+                <p class="qr-name" id="rc-name">-</p>
+                <p class="mono qr-key" id="rc-key">-</p>
+                <div class="btn-row btn-row--center">
+                  <button type="button" class="btn" data-action="copy-key"><svg class="ic"><use href="#i-copy"/></svg> Copiar chave</button>
+                  <button type="button" class="btn" data-action="share-key"><svg class="ic"><use href="#i-share"/></svg> Compartilhar</button>
+                </div>
+              </section>
+              <aside class="panel panel--aside">
+                <h3>Pix recebidos recentemente</h3>
+                <ul id="pix-received" class="tx-list"></ul>
+              </aside>
+            </div>
+          </div>
 
-        <h3 id="extrato-anchor">Extrato</h3>
-        <ul id="client-extract" class="history-list history-list--client">
-          <li>Nenhuma movimentação ainda.</li>
-        </ul>
+          <div class="tab-pane" data-group="pix" data-pane="history" hidden>
+            <section class="panel">
+              <div class="stat-row" id="pix-stats"></div>
+              <ul id="pix-history" class="tx-list"></ul>
+            </section>
+          </div>
+
+          <div class="tab-pane" data-group="pix" data-pane="keys" hidden>
+            <div class="split split--form">
+              <section class="panel">
+                <h3>Chaves cadastradas</h3>
+                <ul id="keys-list" class="key-list"></ul>
+              </section>
+              <form id="key-form" class="panel form" autocomplete="off">
+                <h3>Criar chave de demonstração</h3>
+                <label class="field"><span>Tipo</span>
+                  <select id="key-type">
+                    <option value="random">Chave aleatória</option>
+                    <option value="email">E-mail fictício</option>
+                    <option value="phone">Telefone fictício</option>
+                    <option value="cpf">CPF fictício</option>
+                  </select>
+                </label>
+                <button type="submit" class="btn btn--primary btn--block">Gerar chave</button>
+                <p class="hint">Chaves extras são apenas ilustrativas. O servidor só reconhece a chave principal para receber Pix.</p>
+              </form>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===== TRANSFERÊNCIAS ===== -->
+        <section class="view" id="view-transfer" data-view="transfer" hidden>
+          <div class="view-head">
+            <h1>Transferências</h1>
+            <p class="muted">Envie dinheiro para outra conta informando o número dela.</p>
+          </div>
+          <div class="split split--form">
+            <form id="transfer-form" class="panel form" autocomplete="off">
+              <h3>Nova transferência</h3>
+              <div class="field-row">
+                <label class="field"><span>Conta destinatária</span><input type="text" id="tr-account" placeholder="ID da conta" inputmode="numeric"></label>
+                <label class="field field--narrow"><span>Agência</span><input type="text" id="tr-agency" value="0001" readonly tabindex="-1"></label>
+              </div>
+              <label class="field"><span>Nome do destinatário</span><input type="text" id="tr-name" placeholder="Preenchido automaticamente" readonly tabindex="-1"></label>
+              <div id="tr-recipient" class="recipient" hidden></div>
+              <label class="field"><span>Valor</span><input type="text" id="tr-amount" placeholder="R$ 0,00" inputmode="decimal"></label>
+              <label class="field"><span>Descrição (opcional)</span><input type="text" id="tr-desc" placeholder="Ex: divisão da conta" maxlength="60"></label>
+              <p class="hint" id="tr-avail"></p>
+              <button type="submit" class="btn btn--primary btn--block">Continuar</button>
+            </form>
+            <aside class="panel panel--aside">
+              <h3>Transferências recentes</h3>
+              <ul id="tr-recent" class="tx-list"></ul>
+            </aside>
+          </div>
+        </section>
+
+        <!-- ===== EXTRATO ===== -->
+        <section class="view" id="view-extract" data-view="extract" hidden>
+          <div class="view-head">
+            <h1>Extrato</h1>
+            <p class="muted">Tudo o que entrou e saiu da sua conta, com o saldo depois de cada operação.</p>
+          </div>
+
+          <div class="ex-toolbar">
+            <label class="search"><svg class="ic"><use href="#i-search"/></svg><input type="search" id="ex-search" placeholder="Buscar por nome ou descrição"></label>
+            <div class="filters" id="ex-filters" role="group" aria-label="Filtros do extrato">
+              <button type="button" class="filter is-active" data-filter="all">Todos</button>
+              <button type="button" class="filter" data-filter="in">Entradas</button>
+              <button type="button" class="filter" data-filter="out">Saídas</button>
+              <button type="button" class="filter" data-filter="pix">PIX</button>
+              <button type="button" class="filter" data-filter="transfer">Transferências</button>
+              <button type="button" class="filter" data-filter="payment">Pagamentos</button>
+              <button type="button" class="filter" data-filter="invest">Investimentos</button>
+            </div>
+          </div>
+
+          <div class="stat-row" id="ex-summary"></div>
+          <section class="panel panel--flush"><div id="ex-list"></div></section>
+
+          <section class="panel" id="ex-server-wrap" hidden>
+            <div class="panel__head"><h3>Registros do servidor</h3></div>
+            <p class="hint">Linhas do histórico geral do sistema que mencionam a sua conta.</p>
+            <ul id="ex-server" class="log-list"></ul>
+          </section>
+        </section>
+
+        <!-- ===== INVESTIMENTOS ===== -->
+        <section class="view" id="view-invest" data-view="invest" hidden>
+          <div class="view-head">
+            <h1>Investimentos</h1>
+            <p class="muted">Rendimento simulado e acelerado: 1 minuto real equivale a 3 dias no simulador.</p>
+          </div>
+
+          <div class="stat-row stat-row--big" id="iv-summary">
+            <div class="stat"><span>Valor investido</span><b id="iv-invested" data-money>R$ 0,00</b></div>
+            <div class="stat"><span>Valor atual</span><b id="iv-value" data-money>R$ 0,00</b></div>
+            <div class="stat"><span>Rendimento</span><b id="iv-yield" data-money>R$ 0,00</b></div>
+            <div class="stat"><span>Rentabilidade</span><b id="iv-pct">0,00%</b></div>
+          </div>
+
+          <section class="panel">
+            <div class="panel__head"><h3>Evolução da carteira</h3></div>
+            <div id="iv-chart" class="chart chart--tall"></div>
+          </section>
+
+          <section class="panel">
+            <div class="panel__head"><h3>Meus investimentos</h3></div>
+            <div id="iv-list" class="inv-list"></div>
+          </section>
+
+          <section class="panel">
+            <div class="panel__head"><h3>Escolha onde investir</h3></div>
+            <p class="hint">Taxas e oscilações fictícias, criadas só para esta simulação.</p>
+            <div id="iv-products" class="product-grid"></div>
+          </section>
+        </section>
+
+        <!-- ===== CARTÕES E FATURA ===== -->
+        <section class="view" id="view-cards" data-view="cards" hidden>
+          <div class="view-head">
+            <h1>Cartões e fatura</h1>
+            <p class="muted">Cartões fictícios. Nenhum número, validade ou CVV aqui é real.</p>
+          </div>
+
+          <div class="tabs" data-tabgroup="cards" role="tablist">
+            <button type="button" class="tab is-active" data-tab="card">Cartões</button>
+            <button type="button" class="tab" data-tab="invoice">Fatura</button>
+          </div>
+
+          <div class="tab-pane" data-group="cards" data-pane="card">
+            <div class="split split--cards">
+              <section class="panel panel--cards">
+                <div class="seg" id="card-switch" role="group" aria-label="Tipo de cartão">
+                  <button type="button" class="seg__btn is-active" data-card="virtual">Cartão virtual</button>
+                  <button type="button" class="seg__btn" data-card="physical">Cartão físico</button>
+                </div>
+                <div id="card-stage" class="card-stage"></div>
+                <div class="card-actions">
+                  <button type="button" class="btn" id="btn-card-block" data-action="card-toggle-block"><svg class="ic"><use href="#i-lock"/></svg> <span>Bloquear cartão</span></button>
+                  <button type="button" class="btn" data-action="card-limit"><svg class="ic"><use href="#i-settings"/></svg> Alterar limite</button>
+                  <button type="button" class="btn" data-action="card-invoice"><svg class="ic"><use href="#i-statement"/></svg> Ver fatura</button>
+                  <button type="button" class="btn" data-action="card-new-virtual"><svg class="ic"><use href="#i-refresh"/></svg> Novo cartão virtual</button>
+                </div>
+              </section>
+
+              <aside class="panel panel--aside">
+                <h3>Limite</h3>
+                <div class="meter"><div class="meter__bar" id="card-meter"></div></div>
+                <div class="meter__legend">
+                  <div><span>Disponível</span><b id="card-avail" data-money>R$ 0,00</b></div>
+                  <div><span>Usado</span><b id="card-used" data-money>R$ 0,00</b></div>
+                  <div><span>Total</span><b id="card-total" data-money>R$ 0,00</b></div>
+                </div>
+                <button type="button" class="btn btn--primary btn--block" data-action="card-purchase"><svg class="ic"><use href="#i-bag"/></svg> Simular compra no cartão</button>
+                <h3 class="mt">Compras recentes</h3>
+                <ul id="card-recent" class="tx-list"></ul>
+              </aside>
+            </div>
+          </div>
+
+          <div class="tab-pane" data-group="cards" data-pane="invoice" hidden>
+            <div id="fa-alert" class="callout callout--warn" hidden></div>
+            <div class="split split--cards">
+              <section class="panel">
+                <div class="panel__head">
+                  <div>
+                    <h3 id="fa-title">Fatura atual</h3>
+                    <span class="status" id="fa-status">Aberta</span>
+                  </div>
+                </div>
+                <p class="invoice-total skel" id="fa-total" data-money>R$ 0,00</p>
+                <dl class="kv">
+                  <div><dt>Vencimento</dt><dd id="fa-due">-</dd></div>
+                  <div><dt>Limite disponível</dt><dd id="fa-avail" data-money>-</dd></div>
+                  <div><dt>Limite total</dt><dd id="fa-limit" data-money>-</dd></div>
+                </dl>
+                <div class="btn-row">
+                  <button type="button" class="btn btn--primary" data-action="invoice-pay">Pagar fatura</button>
+                  <button type="button" class="btn" data-action="invoice-split">Parcelar fatura</button>
+                  <button type="button" class="btn" data-action="card-purchase">Simular compra</button>
+                </div>
+                <h3 class="mt">Compras desta fatura</h3>
+                <ul id="fa-items" class="tx-list"></ul>
+              </section>
+
+              <aside class="panel panel--aside">
+                <h3>Compras parceladas</h3>
+                <ul id="fa-installments" class="tx-list"></ul>
+                <h3 class="mt">Histórico de faturas</h3>
+                <ul id="fa-history" class="tx-list"></ul>
+              </aside>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===== PAGAMENTOS ===== -->
+        <section class="view" id="view-pay" data-view="pay" hidden>
+          <div class="view-head">
+            <h1>Pagamentos</h1>
+            <p class="muted">Pague contas fictícias. O valor sai do seu saldo e vai para o extrato.</p>
+          </div>
+          <div class="split split--form">
+            <section class="panel">
+              <h3>O que você quer pagar?</h3>
+              <div id="pay-cats" class="cat-grid"></div>
+              <form id="pay-form" class="form" autocomplete="off">
+                <p class="selected-cat" id="pay-selected">Escolha uma categoria acima.</p>
+                <label class="field"><span>Valor</span><input type="text" id="pay-amount" placeholder="R$ 0,00" inputmode="decimal"></label>
+                <label class="field"><span>Descrição</span><input type="text" id="pay-desc" placeholder="Ex: conta de luz de setembro" maxlength="60"></label>
+                <label class="field"><span>Data de vencimento</span><input type="date" id="pay-date"></label>
+                <p class="hint" id="pay-avail"></p>
+                <button type="submit" class="btn btn--primary btn--block">Continuar</button>
+              </form>
+            </section>
+            <aside class="panel panel--aside">
+              <h3>Pagamentos recentes</h3>
+              <ul id="pay-history" class="tx-list"></ul>
+            </aside>
+          </div>
+        </section>
+
+        <!-- ===== ANÁLISES ===== -->
+        <section class="view" id="view-analytics" data-view="analytics" hidden>
+          <div class="view-head">
+            <h1>Receitas e despesas</h1>
+            <p class="muted">Veja para onde seu dinheiro fictício está indo.</p>
+          </div>
+          <div class="filters" id="an-periods" role="group" aria-label="Período">
+            <button type="button" class="filter" data-period="today">Hoje</button>
+            <button type="button" class="filter" data-period="7d">7 dias</button>
+            <button type="button" class="filter is-active" data-period="30d">30 dias</button>
+            <button type="button" class="filter" data-period="6m">6 meses</button>
+            <button type="button" class="filter" data-period="1y">1 ano</button>
+          </div>
+
+          <div class="stat-row stat-row--big" id="an-stats">
+            <div class="stat"><span>Total recebido</span><b class="pos" id="an-in" data-money>R$ 0,00</b></div>
+            <div class="stat"><span>Total gasto</span><b class="neg" id="an-out" data-money>R$ 0,00</b></div>
+            <div class="stat"><span>Total investido</span><b id="an-invest" data-money>R$ 0,00</b></div>
+            <div class="stat"><span>Maior gasto</span><b id="an-max" data-money>R$ 0,00</b><small id="an-max-sub"></small></div>
+            <div class="stat"><span>Transações</span><b id="an-count">0</b></div>
+          </div>
+
+          <div class="split">
+            <section class="panel">
+              <div class="panel__head"><h3>Entradas e saídas</h3></div>
+              <div id="an-bars" class="chart chart--tall"></div>
+              <div class="legend" id="an-bars-legend"></div>
+            </section>
+            <section class="panel">
+              <div class="panel__head"><h3>Para onde foi o dinheiro</h3></div>
+              <div id="an-donut" class="donut-wrap"></div>
+            </section>
+          </div>
+
+          <section class="panel">
+            <div class="panel__head"><h3>Totais por tipo</h3></div>
+            <div id="an-cats" class="hbars"></div>
+          </section>
+        </section>
+
+        <!-- ===== NOTIFICAÇÕES ===== -->
+        <section class="view" id="view-notifs" data-view="notifs" hidden>
+          <div class="view-head view-head--row">
+            <div>
+              <h1>Notificações</h1>
+              <p class="muted">Avisos sobre Pix, pagamentos, investimentos e fatura.</p>
+            </div>
+            <button type="button" class="btn" data-action="notifs-read-all">Marcar todas como lidas</button>
+          </div>
+          <section class="panel panel--flush"><ul id="nt-list" class="nt-list"></ul></section>
+        </section>
+
+        <!-- ===== PERFIL ===== -->
+        <section class="view" id="view-profile" data-view="profile" hidden>
+          <div class="view-head">
+            <h1>Perfil e ajustes</h1>
+            <p class="muted">Dados fictícios guardados só neste navegador.</p>
+          </div>
+
+          <div class="split">
+            <section class="panel profile">
+              <div class="profile__top">
+                <button type="button" class="avatar avatar--xl avatar--btn" data-avatar data-action="edit-avatar" aria-label="Alterar foto ou avatar"></button>
+                <div>
+                  <h2 id="pf-name">-</h2>
+                  <p class="muted" id="pf-email">-</p>
+                </div>
+              </div>
+              <div class="btn-row">
+                <button type="button" class="btn" data-action="edit-avatar"><svg class="ic"><use href="#i-camera"/></svg> Alterar foto</button>
+                <button type="button" class="btn" data-action="edit-name">Alterar nome</button>
+                <button type="button" class="btn" data-action="edit-email">Alterar e-mail</button>
+              </div>
+              <dl class="kv kv--stack">
+                <div><dt>CPF fictício</dt><dd class="mono" id="pf-cpf">-</dd></div>
+                <div><dt>Número da conta</dt><dd class="mono" id="pf-account">-</dd></div>
+                <div><dt>Agência</dt><dd class="mono" id="pf-agency">0001</dd></div>
+                <div><dt>Chave Pix</dt><dd class="mono" id="pf-key">-</dd></div>
+              </dl>
+            </section>
+
+            <section class="panel">
+              <h3>Segurança</h3>
+              <label class="switch"><input type="checkbox" id="pref-confirm"><span class="switch__ui"></span><span class="switch__text"><b>Confirmar identidade em valores altos</b><small>Pede o ID da conta em operações acima de R$ 1.000,00.</small></span></label>
+              <label class="switch"><input type="checkbox" id="pref-hide"><span class="switch__ui"></span><span class="switch__text"><b>Ocultar saldo ao entrar</b><small>O saldo começa escondido toda vez que você abrir o app.</small></span></label>
+              <label class="switch"><input type="checkbox" id="pref-notify"><span class="switch__ui"></span><span class="switch__text"><b>Avisos na tela</b><small>Mostra um aviso rápido quando chegar uma notificação.</small></span></label>
+              <button type="button" class="btn btn--block" data-action="change-password"><svg class="ic"><use href="#i-key"/></svg> Solicitar nova senha ao administrador</button>
+
+              <h3 class="mt">Preferências</h3>
+              <div class="seg" id="theme-seg" role="group" aria-label="Tema">
+                <button type="button" class="seg__btn" data-theme-set="dark">Escuro</button>
+                <button type="button" class="seg__btn" data-theme-set="light">Claro</button>
+                <button type="button" class="seg__btn" data-theme-set="auto">Automático</button>
+              </div>
+
+              <h3 class="mt">Dados locais</h3>
+              <p class="hint">Apaga extrato detalhado, notificações, investimentos, cartão e fatura guardados neste navegador para esta conta. O saldo do servidor não muda.</p>
+              <button type="button" class="btn btn--danger btn--block" data-action="reset-local"><svg class="ic"><use href="#i-trash"/></svg> Limpar dados locais desta conta</button>
+            </section>
+          </div>
+        </section>
+
       </div>
-    </section>
+    </div>
 
-    <section class="card card-admin">
-      <div class="panel-intro panel-intro--admin">
-        <p class="admin-eyebrow">Uso interno</p>
-        <h2>Painel de operações</h2>
+    <nav class="bottombar" aria-label="Menu rápido">
+      <button type="button" class="bottombar__item" data-nav="home"><svg class="ic"><use href="#i-home"/></svg><span>Início</span></button>
+      <button type="button" class="bottombar__item" data-nav="pix"><svg class="ic"><use href="#i-pix"/></svg><span>Pix</span></button>
+      <button type="button" class="bottombar__item" data-nav="extract"><svg class="ic"><use href="#i-statement"/></svg><span>Extrato</span></button>
+      <button type="button" class="bottombar__item" data-nav="cards"><svg class="ic"><use href="#i-card"/></svg><span>Cartões</span></button>
+      <button type="button" class="bottombar__item" data-action="more"><svg class="ic"><use href="#i-dots"/></svg><span>Mais</span></button>
+    </nav>
+  </div>
+
+  <!-- =====================================================
+       PAINEL ADMINISTRATIVO
+       ===================================================== -->
+  <div id="admin-screen" class="admin" hidden>
+    <header class="admin__bar">
+      <button type="button" class="btn" data-action="close-admin"><svg class="ic"><use href="#i-back"/></svg> Voltar</button>
+      <div class="admin__title">
+        <h1>Painel de operações</h1>
+        <p class="muted">Uso interno. Toda alteração pede um motivo e fica registrada.</p>
+      </div>
+      <button type="button" class="btn-icon" data-action="toggle-theme" aria-label="Alternar tema claro e escuro"><svg class="ic theme-ic"><use href="#i-sun"/></svg></button>
+    </header>
+
+    <div class="admin__body">
+      <div class="stat-row stat-row--big" id="adm-stats"></div>
+
+      <div class="split">
+        <section class="panel">
+          <div class="panel__head"><h3>Saldo por conta</h3></div>
+          <div id="adm-chart-bal" class="chart chart--tall"></div>
+        </section>
+        <section class="panel">
+          <div class="panel__head"><h3>Situação das contas</h3></div>
+          <div id="adm-chart-status" class="donut-wrap"></div>
+        </section>
       </div>
 
-      <div class="form-group">
-        <label>Ajustar saldo da conta</label>
-        <input type="text" id="adm-acc-id" placeholder="ID da conta">
-        <input type="number" id="adm-acc-balance" placeholder="Novo saldo (R$)">
-        <button onclick="saveAccount()">Atualizar saldo</button>
+      <div class="split split--3">
+        <form id="adm-balance-form" class="panel form" autocomplete="off">
+          <h3>Ajustar saldo da conta</h3>
+          <label class="field"><span>ID da conta</span><input type="text" id="adm-bal-id" placeholder="ID da conta"></label>
+          <label class="field"><span>Novo saldo (R$)</span><input type="text" id="adm-bal-value" placeholder="0,00" inputmode="decimal"></label>
+          <label class="field"><span>Motivo</span><input type="text" id="adm-bal-reason" placeholder="Obrigatório" maxlength="80"></label>
+          <button type="submit" class="btn btn--primary btn--block">Atualizar saldo</button>
+        </form>
+
+        <form id="adm-pass-form" class="panel form" autocomplete="off">
+          <h3>Redefinir senha do cliente</h3>
+          <label class="field"><span>ID da conta</span><input type="text" id="adm-pass-id" placeholder="ID da conta"></label>
+          <label class="field"><span>Nova senha</span><input type="password" id="adm-pass-value" placeholder="Nova senha" autocomplete="new-password"></label>
+          <label class="field"><span>Motivo</span><input type="text" id="adm-pass-reason" placeholder="Obrigatório" maxlength="80"></label>
+          <button type="submit" class="btn btn--primary btn--block">Alterar senha</button>
+        </form>
+
+        <form id="adm-block-form" class="panel form" autocomplete="off">
+          <h3>Antifraude: bloqueio cautelar</h3>
+          <label class="field"><span>ID da conta</span><input type="text" id="adm-block-id" placeholder="ID da conta"></label>
+          <label class="field"><span>Motivo</span><input type="text" id="adm-block-reason" placeholder="Obrigatório" maxlength="80"></label>
+          <button type="submit" class="btn btn--danger btn--block">Bloquear ou desbloquear</button>
+          <p class="hint">Se a conta estiver bloqueada, a ação desbloqueia.</p>
+        </form>
       </div>
 
-      <hr>
+      <section class="panel">
+        <div class="panel__head"><h3>Contas cadastradas</h3></div>
+        <div class="table-wrap"><table class="table" id="adm-users"><thead><tr><th>ID</th><th>Nome</th><th>Chave Pix</th><th class="num">Saldo</th><th>Situação</th><th></th></tr></thead><tbody></tbody></table></div>
+      </section>
 
-      <div class="form-group">
-        <label>Redefinir senha do cliente</label>
-        <input type="text" id="adm-reset-id" placeholder="ID da conta">
-        <input type="password" id="adm-reset-pass" placeholder="Nova senha">
-        <button onclick="resetPasswordByAdmin()">Alterar senha</button>
+      <div class="split">
+        <section class="panel">
+          <div class="panel__head"><h3>Movimentações do sistema</h3></div>
+          <label class="search"><svg class="ic"><use href="#i-search"/></svg><input type="search" id="adm-hist-search" placeholder="Buscar no histórico"></label>
+          <ul id="adm-history" class="log-list log-list--tall"></ul>
+        </section>
+        <section class="panel">
+          <div class="panel__head"><h3>Registro das minhas alterações</h3></div>
+          <p class="hint">Guardado neste navegador. Cada ação de administrador aparece aqui com motivo e resultado.</p>
+          <ul id="adm-audit" class="log-list log-list--tall"></ul>
+        </section>
       </div>
-
-      <hr>
-
-      <div class="form-group">
-        <label>Antifraude — bloqueio cautelar</label>
-        <p class="field-hint">Usa o ID informado no campo acima ("Ajustar saldo da conta").</p>
-        <button class="btn-block" onclick="toggleBlock()">Bloquear / desbloquear ID</button>
-      </div>
-
-      <hr>
-
-      <h3>Movimentações</h3>
-      <ul id="admin-history" class="history-list">
-        <li>Nenhuma movimentação até o momento.</li>
-      </ul>
-    </section>
-
+    </div>
   </div>
 
   <script src="/socket.io/socket.io.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="script.js"></script>
 </body>
 </html>
